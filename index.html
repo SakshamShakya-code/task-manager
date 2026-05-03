@@ -1,39 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>TaskFlow</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <p class="subtitle">My Workspace</p>
-      <h1>Task Manager</h1>
-    </div>
 
+<div id="splash">
+  <div class="sp-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+    </svg>
+  </div>
+  <div class="sp-name">TASKFLOW</div>
+  <div class="sp-tag">STAY FOCUSED. GET THINGS DONE.</div>
+  <div class="sp-bar"><div class="sp-fill"></div></div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="tb-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+    </div>
+    <span class="tb-name">TASKFLOW</span>
+    <span class="tb-date" id="dt"></span>
+  </div>
+
+  <div class="main">
     <div class="stats">
-      <div class="stat-card"><p class="label">Total</p><p id="stat-total" class="value">0</p></div>
-      <div class="stat-card"><p class="label">Completed</p><p id="stat-done" class="value green">0</p></div>
-      <div class="stat-card"><p class="label">Pending</p><p id="stat-pending" class="value amber">0</p></div>
+      <div class="stat"><div class="stat-l">Total</div><div class="stat-v w" id="s-t">0</div></div>
+      <div class="stat"><div class="stat-l">Completed</div><div class="stat-v b" id="s-d">0</div></div>
+      <div class="stat"><div class="stat-l">Pending</div><div class="stat-v o" id="s-p">0</div></div>
     </div>
 
-    <div class="input-card">
-      <input type="text" id="task-input" placeholder="Add a new task..." />
-      <button id="add-btn">Add task</button>
+    <div class="input-row">
+      <input class="ti" id="ti" type="text" placeholder="ADD A NEW TASK..." style="background:#0d0d0d !important;"/>
+      <button class="ab" id="ab">+ ADD</button>
     </div>
 
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="pending">Pending</button>
-      <button class="filter-btn" data-filter="completed">Completed</button>
+      <button class="fb active" data-f="all">ALL</button>
+      <button class="fb" data-f="pending">PENDING</button>
+      <button class="fb" data-f="completed">COMPLETED</button>
     </div>
 
-    <div id="task-list"></div>
-    <p id="empty-msg" class="empty">No tasks here. Add one above!</p>
+    <div class="sec-label" id="sl">ALL TASKS</div>
+    <div id="tl"></div>
+    <p class="empty" id="em">— NOTHING HERE YET —</p>
+    <div class="footer">TASKFLOW — HTML · CSS · JAVASCRIPT</div>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
