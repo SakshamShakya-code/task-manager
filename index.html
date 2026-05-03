@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <p class="subtitle">My Workspace</p>
+      <h1>Task Manager</h1>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card"><p class="label">Total</p><p id="stat-total" class="value">0</p></div>
+      <div class="stat-card"><p class="label">Completed</p><p id="stat-done" class="value green">0</p></div>
+      <div class="stat-card"><p class="label">Pending</p><p id="stat-pending" class="value amber">0</p></div>
+    </div>
+
+    <div class="input-card">
+      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <button id="add-btn">Add task</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="pending">Pending</button>
+      <button class="filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+    <div id="task-list"></div>
+    <p id="empty-msg" class="empty">No tasks here. Add one above!</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
