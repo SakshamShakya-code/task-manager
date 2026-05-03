@@ -1,112 +1,98 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+// Set date in topbar
+document.getElementById('dt').textContent = new Date()
+  .toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+  .toUpperCase();
 
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f5f5f0;
-  color: #1a1a1a;
-  min-height: 100vh;
-  padding: 2rem 1rem;
+// Hide splash after 2.2s
+setTimeout(() => {
+  const s = document.getElementById('splash');
+  s.classList.add('hide');
+  setTimeout(() => {
+    s.style.display = 'none';
+    document.getElementById('app').classList.add('show');
+  }, 600);
+}, 2200);
+
+// Load tasks from localStorage
+let tasks = JSON.parse(localStorage.getItem('taskflow') || '[]');
+let filter = 'all';
+
+const save = () => localStorage.setItem('taskflow', JSON.stringify(tasks));
+
+function stats() {
+  const done = tasks.filter(t => t.done).length;
+  document.getElementById('s-t').textContent = tasks.length;
+  document.getElementById('s-d').textContent = done;
+  document.getElementById('s-p').textContent = tasks.length - done;
 }
 
-.container { max-width: 640px; margin: 0 auto; }
+function render() {
+  const tl = document.getElementById('tl');
+  const em = document.getElementById('em');
+  const sl = document.getElementById('sl');
 
-.header { margin-bottom: 1.5rem; }
-.header .subtitle { font-size: 13px; color: #888; margin-bottom: 4px; }
-.header h1 { font-size: 24px; font-weight: 600; }
+  sl.textContent = { all: 'ALL TASKS', pending: 'PENDING TASKS', completed: 'COMPLETED TASKS' }[filter];
 
-/* Stats */
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-.stat-card { background: #fff; border-radius: 10px; padding: 14px 16px; border: 0.5px solid #e0e0d8; }
-.stat-card .label { font-size: 12px; color: #888; margin-bottom: 4px; }
-.stat-card .value { font-size: 24px; font-weight: 600; }
-.stat-card .value.green { color: #0f7c56; }
-.stat-card .value.amber { color: #b06a0a; }
+  const filtered = tasks.filter(t =>
+    filter === 'all' ? true : filter === 'completed' ? t.done : !t.done
+  );
 
-/* Input */
-.input-card {
-  background: #fff;
-  border: 0.5px solid #e0e0d8;
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  gap: 10px;
-  margin-bottom: 1rem;
+  tl.innerHTML = '';
+  em.style.display = filtered.length ? 'none' : 'block';
+
+  filtered.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'tc' + (t.done ? ' done' : '');
+    card.innerHTML = `
+      <button class="cb ${t.done ? 'checked' : ''}" data-id="${t.id}">${t.done ? '✓' : ''}</button>
+      <span class="tt ${t.done ? 'done' : ''}">${t.text}</span>
+      <span class="badge ${t.done ? 'd' : 'p'}">${t.done ? 'DONE' : 'PENDING'}</span>
+      <button class="db" data-id="${t.id}">✕</button>
+    `;
+    tl.appendChild(card);
+  });
+
+  stats();
 }
 
-input[type="text"] {
-  flex: 1;
-  border: 0.5px solid #d0d0c8;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
-  outline: none;
-}
-input[type="text"]:focus { border-color: #888; }
+// Add task
+document.getElementById('ab').addEventListener('click', () => {
+  const inp = document.getElementById('ti');
+  const text = inp.value.trim();
+  if (!text) return;
+  tasks.push({ id: Date.now(), text, done: false });
+  save(); render(); inp.value = ''; inp.focus();
+});
 
-button#add-btn {
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 20px;
-  font-size: 14px;
-  cursor: pointer;
-}
-button#add-btn:hover { background: #333; }
+// Enter key
+document.getElementById('ti').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('ab').click();
+});
 
-/* Filters */
-.filters { display: flex; gap: 6px; margin-bottom: 1rem; }
-.filter-btn {
-  font-size: 13px;
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 0.5px solid #d0d0c8;
-  background: #fff;
-  cursor: pointer;
-}
-.filter-btn.active { background: #f0f0e8; border-color: #999; font-weight: 500; }
+// Toggle / Delete
+document.getElementById('tl').addEventListener('click', e => {
+  const c = e.target.closest('.cb');
+  const d = e.target.closest('.db');
+  if (c) {
+    const id = +c.dataset.id;
+    tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+    save(); render();
+  }
+  if (d) {
+    const id = +d.dataset.id;
+    tasks = tasks.filter(t => t.id !== id);
+    save(); render();
+  }
+});
 
-/* Task cards */
-.task-card {
-  background: #fff;
-  border: 0.5px solid #e0e0d8;
-  border-radius: 12px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-  transition: opacity 0.2s;
-}
-.task-card.done { opacity: 0.6; }
+// Filters
+document.querySelectorAll('.fb').forEach(b => {
+  b.addEventListener('click', () => {
+    filter = b.dataset.f;
+    document.querySelectorAll('.fb').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    render();
+  });
+});
 
-.check-btn {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid #bbb;
-  background: transparent;
-  cursor: pointer;
-  font-size: 11px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.check-btn.checked { background: #d4f0e4; border-color: #0f7c56; color: #0f7c56; }
-
-.task-text { flex: 1; font-size: 14px; }
-.task-text.done { text-decoration: line-through; color: #aaa; }
-
-.badge {
-  font-size: 11px; padding: 2px 8px;
-  border-radius: 6px;
-  background: #fff3e0; color: #b06a0a;
-}
-.badge.done { background: #d4f0e4; color: #0f7c56; }
-
-.del-btn {
-  background: none; border: none;
-  font-size: 16px; cursor: pointer;
-  color: #aaa; padding: 0 4px;
-}
-.del-btn:hover { color: #c0392b; }
-
-.empty { text-align: center; color: #aaa; font-size: 14px; padding: 2rem 0; display: none; }
+render();
