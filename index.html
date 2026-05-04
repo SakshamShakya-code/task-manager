@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TaskFlow</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TaskFlow</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -29,25 +29,21 @@
     <span class="tb-name">TASKFLOW</span>
     <span class="tb-date" id="dt"></span>
   </div>
-
   <div class="main">
     <div class="stats">
       <div class="stat"><div class="stat-l">Total</div><div class="stat-v w" id="s-t">0</div></div>
       <div class="stat"><div class="stat-l">Completed</div><div class="stat-v b" id="s-d">0</div></div>
       <div class="stat"><div class="stat-l">Pending</div><div class="stat-v o" id="s-p">0</div></div>
     </div>
-
     <div class="input-row">
-      <input class="ti" id="ti" type="text" placeholder="ADD A NEW TASK..." style="background:#0d0d0d !important;"/>
+      <input class="ti" id="ti" type="text" placeholder="ADD A NEW TASK..."/>
       <button class="ab" id="ab">+ ADD</button>
     </div>
-
     <div class="filters">
       <button class="fb active" data-f="all">ALL</button>
       <button class="fb" data-f="pending">PENDING</button>
       <button class="fb" data-f="completed">COMPLETED</button>
     </div>
-
     <div class="sec-label" id="sl">ALL TASKS</div>
     <div id="tl"></div>
     <p class="empty" id="em">— NOTHING HERE YET —</p>
